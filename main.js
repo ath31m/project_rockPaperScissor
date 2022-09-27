@@ -1,13 +1,21 @@
 const choices = ["rock","paper","scissors"];
+const winnerList = [];
 
 function game() {
     //play the game //last five rounds  //console based
-    playRound();
+    for (let i = 1; i <= 5; i++ ){
+        playRound(i);
+    }
+    document.querySelector("button").textContent = "Play Again";
+    logWins();
 }
 
-function playRound() {
+function playRound(round) {
     const playerSelection = playerChoice();
     const computerSelection = computerChoice();
+    const winner = checkWinner(playerSelection,computerSelection)
+    winnerList.push(winner);
+    logRounds(playerSelection,computerSelection,winner,round);
 }
 
 function playerChoice() {
@@ -30,7 +38,8 @@ function playerChoice() {
         
         input = input.toLowerCase();
         check = validateInput(input);
-    }   
+    } 
+    return input;  
 }
 
 function computerChoice() {
@@ -49,7 +58,34 @@ function validateInput(choice){
 }
 
 function checkWinner(choiceP,choiceC){
-    
+    if(choiceP === choiceC){
+        return "Tie";
+    } else if(
+        (choiceP === "rock" && choiceC === "scissors") ||
+        (choiceP === "paper" && choiceC === "rock") ||
+        (choiceP === "scissors" && choiceC === "paper")
+    ){
+        return "Player";
+    }
+    else {
+        return "Computer"
+    }
 }
 
-game();
+function logWins(){
+    let playerWins = winnerList.filter(item => item == "Player").length;
+    let computerWins = winnerList.filter(item => item == "Computer").length;
+    let ties = winnerList.filter(item => item == "Tie").length;
+    console.log("Results are : ");
+    console.log("Player Wins :  " + playerWins);
+    console.log("Computer Wins :  " + computerWins); 
+    console.log("Ties :  " + ties);
+}
+
+function logRounds(playerChoice,computerChoice,winner,round){
+    console.log("Round : "+ round);
+    console.log("Player chose : ", playerChoice);
+    console.log("Computer chose : ", computerChoice);
+    console.log("The winner is : ", winner);
+    console.log("---------------------------------------------------------------------");
+}
